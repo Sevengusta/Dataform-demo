@@ -1,0 +1,43 @@
+-- This script inserts data into the prd_mtrl_desc table.
+
+config {
+  type: "operations",  
+  disabled: false,     
+  name: "insert_prd_mtrl_desc_data",  
+  dependencies: ["prd_mtrl_desc"], 
+  tags: ["product"],   
+  hasOutput: false,    
+  schema: "dataform_test"  
+}
+
+-- Insert sample data into the prd_mtrl_desc table
+INSERT INTO ${ref("prd_mtrl_desc")} (mtrl_nbr, sap_src_sys_cd, lang, mtrl_desc, action_type, row_insert_timestamp, row_update_timestamp)
+SELECT 
+  CONCAT('M', CAST(COALESCE(MAX(CAST(mtrl_nbr AS INT64)), 0) + 1 AS STRING)) AS mtrl_nbr,
+  CONCAT('SAP', CAST(COALESCE(MAX(CAST(mtrl_nbr AS INT64)), 0) + 1 AS STRING)) AS sap_src_sys_cd,
+  'EN' AS lang,
+  CONCAT('Material Description ', CAST(COALESCE(MAX(CAST(mtrl_nbr AS INT64)), 0) + 1 AS STRING)) AS mtrl_desc,
+  'ACTIVE' AS action_type,
+  CURRENT_TIMESTAMP AS row_insert_timestamp,
+  CURRENT_TIMESTAMP AS row_update_timestamp
+FROM ${ref("prd_mtrl_desc")}
+UNION ALL
+SELECT 
+  CONCAT('M', CAST(COALESCE(MAX(CAST(mtrl_nbr AS INT64)), 0) + 2 AS STRING)),
+  CONCAT('SAP', CAST(COALESCE(MAX(CAST(mtrl_nbr AS INT64)), 0) + 2 AS STRING)),
+  'EN',
+  CONCAT('Material Description ', CAST(COALESCE(MAX(CAST(mtrl_nbr AS INT64)), 0) + 2 AS STRING)),
+  'ACTIVE',
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+FROM ${ref("prd_mtrl_desc")}
+UNION ALL
+SELECT 
+  CONCAT('M', CAST(COALESCE(MAX(CAST(mtrl_nbr AS INT64)), 0) + 3 AS STRING)),
+  CONCAT('SAP', CAST(COALESCE(MAX(CAST(mtrl_nbr AS INT64)), 0) + 3 AS STRING)),
+  'EN',
+  CONCAT('Material Description ', CAST(COALESCE(MAX(CAST(mtrl_nbr AS INT64)), 0) + 3 AS STRING)),
+  'ACTIVE',
+  CURRENT_TIMESTAMP,
+  CURRENT_TIMESTAMP
+FROM ${ref("prd_mtrl_desc")};

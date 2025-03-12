@@ -1,0 +1,54 @@
+-- Este script SQLX cria uma tabela com todas as configurações disponíveis sem dados.
+
+config {
+  type: "operations",
+  disabled: false,
+  name: "prd_mtrl_desc",
+  hasOutput: true,  
+  hermetic: false,
+  schema: "dataform_test"
+}
+
+-- AUTHOR: gustavo
+-- CREATED: 12/03/2025
+    -- Operação principal para criar a tabela vazia
+    CREATE OR REPLACE TABLE  ${self()} (
+        mtrl_nbr STRING NOT NULL OPTIONS (description="Material Number") ,
+        sap_src_sys_cd STRING OPTIONS(description="SAP Source System Code"),
+        lang STRING OPTIONS(description="Language"),,
+        mtrl_desc STRING OPTIONS(description="SMaterial Description"),,
+        action_type STRING OPTIONS(description="Action Type"),,
+        row_insert_timestamp TIMESTAMP OPTIONS(description="Row Insert Timestamp"),,
+        row_update_timestamp TIMESTAMP OPTIONS(description="Row Update Timestamp"),,
+        PRIMARY KEY (mtrl_nbr) NOT ENFORCED
+    )
+
+    --PARTITION BY DATE(row_insert_timestamp)
+    
+    --CLUSTER BY  sap_src_sys_cd   
+    
+    OPTIONS (       
+      labels=[("last_update","12-03-2025"),("developer","gustavo")],
+      description="Table with product description"
+    )
+
+
+ -- Explicação das Configurações
+-- •	type: Define o tipo de objeto a ser criado (neste caso, uma tabela).
+-- •	disabled: Define se a tabela está desativada (false significa que está ativa).
+-- •	protected: Se true, protege a tabela contra exclusão acidental. As ações só podem especificar 'protected: true' se forem do tipo 'incremental'.
+-- •	name: O nome da tabela.
+-- •	tags: Lista de tags associadas à tabela para categorização.
+-- •	dependencies: Tabelas ou views das quais esta tabela depende.
+-- •	hermetic: Define se a tabela é hermética (false significa que não é hermética).
+-- •	schema: O esquema no qual a tabela será criada.
+-- •	description: Uma descrição detalhada do que a tabela representa.
+
+-- Ajustes Necessários
+-- •	Substitua your_schema, your_table_name, your_tag_1, your_tag_2, your_database, e quaisquer outras informações de exemplo pelos valores apropriados para o seu caso.
+-- •	Ajuste a query SQL conforme necessário para incluir as colunas e filtros desejados.
+
+-- Como Usar
+-- 1.	Crie o Script: Adicione o script SQLX acima no Dataform.
+-- 2.	Defina as Variáveis: Certifique-se de definir a variável datasel conforme necessário no seu projeto Dataform.
+-- 3.	Executar o Script: Execute o script no Dataform para criar a tabela no seu banco de dados.
