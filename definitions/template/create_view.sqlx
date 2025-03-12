@@ -1,9 +1,10 @@
--- Este script SQLX cria uma tabela com todas as configurações disponíveis sem dados.
+-- Este script SQLX cria uma view com todas as configurações disponíveis com dados
 
 config {
   type: "operations",
   disabled: false,
-  name: "prd_mtrl_desc",
+  name: "prd_mtrl_desc_v",  
+  dependencies: ["prd_mtrl_desc_t"],  
   tags: ["product"],
   hasOutput: true,  
   hermetic: false,
@@ -12,26 +13,14 @@ config {
 
 -- AUTHOR: gustavo
 -- CREATED: 12/03/2025
-    -- Operação principal para criar a tabela vazia
-    CREATE OR REPLACE TABLE  ${self()} (
-        mtrl_nbr STRING NOT NULL OPTIONS (description="Material Number") ,
-        sap_src_sys_cd STRING OPTIONS(description="SAP Source System Code"),
-        lang STRING OPTIONS(description="Language"),,
-        mtrl_desc STRING OPTIONS(description="SMaterial Description"),,
-        action_type STRING OPTIONS(description="Action Type"),,
-        row_insert_timestamp TIMESTAMP OPTIONS(description="Row Insert Timestamp"),,
-        row_update_timestamp TIMESTAMP OPTIONS(description="Row Update Timestamp"),,
-        PRIMARY KEY (mtrl_nbr) NOT ENFORCED
-    )
+-- Operação principal para criar a tabela vazia
+  CREATE OR REPLACE VIEW ${self()} AS  -- Use CREATE OR REPLACE VIEW to create a view
+  SELECT t.* FROM ${ref("prd_mtrl_desc_t")} AS t 
 
-    PARTITION BY DATE(row_insert_timestamp)
-    
-    CLUSTER BY  sap_src_sys_cd   
-    
-    OPTIONS (       
-      labels=[("last_update","12-03-2025"),("developer","gustavo")],
-      description="Table with product description"
-    )
+--OPTIONS (       
+--  labels=[("last_update","12-03-2025"),("developer","gustavo")],
+--  description="View with product description"
+--)
 
 
  -- Explicação das Configurações

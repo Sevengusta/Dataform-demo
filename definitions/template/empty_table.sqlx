@@ -3,7 +3,7 @@
 config {
   type: "operations",
   disabled: false,
-  name: "prd_mtrl_desc",
+  name: "prd_mtrl_desc_t",
   hasOutput: true,  
   hermetic: false,
   schema: "dataform_test"
